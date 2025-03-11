@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout code from the GitHub repository
-                git 'https://github.com/Ugginagithub/Rock-paper-scissors.git'
+                 git branch: 'main', url: 'https://github.com/Ugginagithub/Rock-paper-scissors.git'
             }
         }
 
