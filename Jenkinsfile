@@ -28,8 +28,8 @@ pipeline {
                     // Run the Docker container and test it
                     sh '''
                         docker run -d -p 8081:80 ${DOCKER_IMAGE}
-                        sleep 5  // Wait for the container to start
-                        curl http://localhost:8081  // Test if the server responds
+                        sleep 5  # Wait for the container to start
+                        curl http://localhost:8081  # Test if the server responds
                     '''
                 }
             }
