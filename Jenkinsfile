@@ -31,12 +31,12 @@ pipeline {
                     // Clean up any existing containers using the port 8082 before starting a new one
                     echo 'Cleaning up any existing containers using port ${CONTAINER_PORT}'
                     sh '''
-                        # Stop and remove any containers using the port 8082
-                        docker ps -q --filter "ancestor=${DOCKER_IMAGE}" --filter "publish=${CONTAINER_PORT}:80" | xargs -r docker stop
-                        docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}" --filter "publish=${CONTAINER_PORT}:80" | xargs -r docker rm
+                        # Stop and remove any containers using the rps image
+                        docker ps -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker stop
+                        docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker rm
 
-                        # Ensure there are no containers left using port 8082
-                        docker ps -a --filter "publish=${CONTAINER_PORT}:80"
+                        # Check for any remaining containers
+                        docker ps -a --filter "publish=${CONTAINER_PORT}"
                     '''
                     
                     // Run the Docker container and test it
@@ -64,12 +64,12 @@ pipeline {
                     // Clean up any existing containers using the port 8082 before starting a new one
                     echo 'Cleaning up any existing containers using port ${CONTAINER_PORT} before deploying'
                     sh '''
-                        # Stop and remove any containers using the port 8082
-                        docker ps -q --filter "ancestor=${DOCKER_IMAGE}" --filter "publish=${CONTAINER_PORT}:80" | xargs -r docker stop
-                        docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}" --filter "publish=${CONTAINER_PORT}:80" | xargs -r docker rm
+                        # Stop and remove any containers using the rps image
+                        docker ps -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker stop
+                        docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker rm
 
-                        # Ensure there are no containers left using port 8082
-                        docker ps -a --filter "publish=${CONTAINER_PORT}:80"
+                        # Check for any remaining containers
+                        docker ps -a --filter "publish=${CONTAINER_PORT}"
                     '''
 
                     // Deploy the Docker container (for this example, we run it locally)
