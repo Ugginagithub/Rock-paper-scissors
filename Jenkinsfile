@@ -27,9 +27,9 @@ pipeline {
                 script {
                     // Run the Docker container and test it
                     sh '''
-                        docker run -d -p 8081:80 ${DOCKER_IMAGE}
+                        docker run -d -p 8082:80 ${DOCKER_IMAGE}
                         sleep 5  # Wait for the container to start
-                        curl http://localhost:8081  # Test if the server responds
+                        curl http://localhost:8082  # Test if the server responds
                     '''
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Deploy the Docker container (for this example, we run it locally)
-                    sh 'docker run -d -p 8081:80 ${DOCKER_IMAGE}'
+                    sh 'docker run -d -p 8082:80 ${DOCKER_IMAGE}'
                 }
             }
         }
