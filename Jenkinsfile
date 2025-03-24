@@ -29,14 +29,17 @@ pipeline {
             steps {
                 script {
                     // Clean up any existing containers using the port 8082 before starting a new one
-                    echo 'Cleaning up any existing containers using port ${CONTAINER_PORT}'
+                    echo "Cleaning up any existing containers using port ${CONTAINER_PORT}"
                     sh '''
-                        # Stop and remove any containers using the rps image
-                        docker ps -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker stop
-                        docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker rm
-
-                        # Check for any remaining containers
-                        docker ps -a --filter "publish=${CONTAINER_PORT}"
+                        # Stop and remove any containers bound to port 8082
+                        CONTAINER_IDS=$(docker ps -q --filter "publish=${CONTAINER_PORT}")
+                        if [ -n "$CONTAINER_IDS" ]; then
+                            echo "Stopping and removing containers using port ${CONTAINER_PORT}"
+                            docker stop $CONTAINER_IDS
+                            docker rm $CONTAINER_IDS
+                        else
+                            echo "No containers found using port ${CONTAINER_PORT}"
+                        fi
                     '''
                     
                     // Run the Docker container and test it
@@ -61,15 +64,18 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Clean up any existing containers using the port 8082 before starting a new one
-                    echo 'Cleaning up any existing containers using port ${CONTAINER_PORT} before deploying'
+                    // Clean up any existing containers using the port 8082 before deploying
+                    echo "Cleaning up any existing containers using port ${CONTAINER_PORT} before deploying"
                     sh '''
-                        # Stop and remove any containers using the rps image
-                        docker ps -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker stop
-                        docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}" | xargs -r docker rm
-
-                        # Check for any remaining containers
-                        docker ps -a --filter "publish=${CONTAINER_PORT}"
+                        # Stop and remove any containers bound to port 8082
+                        CONTAINER_IDS=$(docker ps -q --filter "publish=${CONTAINER_PORT}")
+                        if [ -n "$CONTAINER_IDS" ]; then
+                            echo "Stopping and removing containers using port ${CONTAINER_PORT}"
+                            docker stop $CONTAINER_IDS
+                            docker rm $CONTAINER_IDS
+                        else
+                            echo "No containers found using port ${CONTAINER_PORT}"
+                        fi
                     '''
 
                     // Deploy the Docker container (for this example, we run it locally)
